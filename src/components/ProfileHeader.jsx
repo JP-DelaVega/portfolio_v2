@@ -8,7 +8,7 @@ export default function ProfileHeader() {
             {/* Background Cover */}
             <div className="relative h-44 sm:h-56 bg-slate-800">
                 <img
-                    src="./public/images/background.png"
+                    src="/images/background.png"
                     alt="Background Cover"
                     className="object-cover w-full h-full"
                 />
@@ -19,7 +19,7 @@ export default function ProfileHeader() {
                 <div className="flex flex-col justify-between gap-4 mb-4 -mt-16 sm:flex-row sm:items-end sm:-mt-20">
                     <div className="relative">
                         <img
-                            src="./public/images/profile.jpg"
+                            src="/images/profile.jpg"
                             alt="John Philip Dela Vega"
                             className="object-cover bg-white border-4 border-white rounded-full shadow-md w-28 h-28 sm:w-36 sm:h-36"
                         />

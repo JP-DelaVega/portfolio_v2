@@ -33,7 +33,7 @@ export default function PostCard({ id, title, timestamp = 'Just now', children, 
       <div className="flex items-center justify-between p-4 border-b border-slate-100">
         <div className="flex items-center gap-3">
           <img
-            src="./public/images/profile.jpg"
+            src="/images/profile.jpg"
             alt="John Philip"
             className="object-cover border rounded-full w-11 h-11 border-slate-200 ring-2 ring-sky-500/20"
           />

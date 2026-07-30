@@ -8,7 +8,7 @@ export default function ProjectsPost() {
     {
       title: 'RAG System',
       description: 'Retrieval-Augmented Generation application for querying context-aware document datasets.',
-      image: '/images/rag.png',
+      image: 'crag.png',
       code: 'https://github.com/JP-DelaVega/chat.git',
       link: 'https://chat-hazel-three-68.vercel.app/',
       stacks: ['React.js', 'FastAPI', 'Tailwind', "MongoDB", "GeminiEmbedding"]

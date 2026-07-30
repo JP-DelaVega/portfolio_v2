@@ -161,7 +161,7 @@ export default function ChatWidget() {
           <div className="relative">
             <div className="w-14 h-14 rounded-full border-2 border-white shadow-xl overflow-hidden transition-transform hover:scale-105 active:scale-95">
               <img
-                src="/./public/images/profile.jpg"
+                src="/images/profile.jpg"
                 alt="Chat"
                 className="w-full h-full object-cover"
               />
