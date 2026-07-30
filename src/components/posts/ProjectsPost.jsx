@@ -8,7 +8,7 @@ export default function ProjectsPost() {
     {
       title: 'RAG System',
       description: 'Retrieval-Augmented Generation application for querying context-aware document datasets.',
-      image: 'crag.png',
+      image: '/images/rag.png',
       code: 'https://github.com/JP-DelaVega/chat.git',
       link: 'https://chat-hazel-three-68.vercel.app/',
       stacks: ['React.js', 'FastAPI', 'Tailwind', "MongoDB", "GeminiEmbedding"]
@@ -19,7 +19,7 @@ export default function ProjectsPost() {
       image: '/images/swiftCV.png',
       code: 'https://github.com/JP-DelaVega/SwiftCV.git',
       link: 'https://swift-cv-xi.vercel.app/',
-      stacks: ['React.js', 'Node.js', 'Tailwind','MongoDB','Clerk', 'Gemini']
+      stacks: ['React.js', 'Node.js', 'Tailwind', 'MongoDB', 'Clerk', 'Gemini']
     },
     {
       title: 'Job Application Tracker',
@@ -48,10 +48,10 @@ export default function ProjectsPost() {
 
               <div className="flex gap-3">
                 {/* Small image with border */}
-                <a 
-                  href={proj.link} 
-                  target="_blank" 
-                  rel="noreferrer" 
+                <a
+                  href={proj.link}
+                  target="_blank"
+                  rel="noreferrer"
                   className="block shrink-0"
                 >
                   <div className="w-24 h-24 overflow-hidden border rounded-lg bg-slate-500 border-slate-200">
@@ -67,23 +67,23 @@ export default function ProjectsPost() {
                 <div className="flex-1 min-w-0 py-0.5">
                   <h3 className="text-sm font-bold text-slate-900">{proj.title}</h3>
                   <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">{proj.description}</p>
-                  
-            
+
+
                   {/* Casual links */}
                   <p className="text-[12px] text-slate-500 mt-0">
                     You can access it{' '}
-                    <a 
-                      href={proj.link} 
-                      target="_blank" 
+                    <a
+                      href={proj.link}
+                      target="_blank"
                       rel="noreferrer"
                       className="font-medium text-sky-600 hover:underline"
                     >
                       here
                     </a>
                     {' '}and here's the{' '}
-                    <a 
-                      href={proj.code} 
-                      target="_blank" 
+                    <a
+                      href={proj.code}
+                      target="_blank"
                       rel="noreferrer"
                       className="font-medium text-sky-600 hover:underline"
                     >
