@@ -1,6 +1,6 @@
 import React from 'react';
 import PostCard from '../PostCard';
-import { 
+import {
   FaEnvira,      // MongoDB green leaf / database icon alternative
   FaBolt,        // Vantiq event-driven icon
   FaMicrosoft,   // Microsoft
@@ -10,58 +10,58 @@ import {
 
 export default function CertificationsPost() {
   const certs = [
-    { 
-      title: 'Building GenAI Applications with MongoDB', 
-      issuer: 'MongoDB', 
+    {
+      title: 'Building GenAI Applications with MongoDB',
+      issuer: 'MongoDB',
       year: '2026',
       icon: FaEnvira,
       color: 'text-emerald-600'
     },
-    { 
-      title: 'Event-Driven Applications Foundations Course', 
-      issuer: 'Vantiq', 
+    {
+      title: 'Event-Driven Applications Foundations Course',
+      issuer: 'Vantiq',
       year: '2026',
       icon: FaBolt,
       color: 'text-amber-500'
     },
-    { 
-      title: 'Microsoft Certified: Azure Fundamentals', 
-      issuer: 'Microsoft', 
+    {
+      title: 'Microsoft Certified: Azure Fundamentals',
+      issuer: 'Microsoft',
       year: '2025',
       icon: FaMicrosoft,
       color: 'text-sky-600'
     },
-    { 
-      title: 'Front-end Developer Specialist (OutSystems 11)', 
-      issuer: 'OutSystems', 
+    {
+      title: 'Front-end Developer Specialist (OutSystems 11)',
+      issuer: 'OutSystems',
       year: '2024',
       icon: FaDesktop,
       color: 'text-red-600'
     },
-    { 
-      title: 'Associate Developer (ODC)', 
-      issuer: 'OutSystems', 
+    {
+      title: 'Associate Developer (ODC)',
+      issuer: 'OutSystems',
       year: '2024',
       icon: FaDesktop,
       color: 'text-red-600'
     },
-    { 
-      title: 'Associate Reactive Developer (OutSystems 11)', 
-      issuer: 'OutSystems', 
+    {
+      title: 'Associate Reactive Developer (OutSystems 11)',
+      issuer: 'OutSystems',
       year: '2023',
       icon: FaDesktop,
       color: 'text-red-600'
     },
-    { 
-      title: 'HTML and CSS in depth', 
-      issuer: 'Meta', 
+    {
+      title: 'HTML and CSS in depth',
+      issuer: 'Meta',
       year: '2022',
       icon: FaMeta,
       color: 'text-blue-600'
     },
-    { 
-      title: 'Principles of UX/UI Design', 
-      issuer: 'Meta', 
+    {
+      title: 'Principles of UX/UI Design',
+      issuer: 'Meta',
       year: '2022',
       icon: FaMeta,
       color: 'text-blue-600'
@@ -69,7 +69,7 @@ export default function CertificationsPost() {
   ];
 
   return (
-    <PostCard id="certifications" timestamp="1d ago">
+    <PostCard id="certifications" timestamp="1d ago" initialComments={[{ text: "more on my linkedin profile", timestamp: "Jul 31, 2026, 10:24 AM" }]}>
       <div className="space-y-3">
         <p className="text-sm leading-relaxed text-slate-700">
           Here are my certifications and credentials—things I've picked up while building and learning.

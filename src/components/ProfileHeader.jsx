@@ -4,7 +4,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function ProfileHeader() {
     return (
-        <div className="mb-6 overflow-hidden bg-white border shadow-sm rounded-xl border-slate-200">
+        <div className="mb-6 overflow-hidden bg-white border shadow-sm rounded-xl border-slate-200" id="ProfileHeader">
             {/* Background Cover */}
             <div className="relative h-44 sm:h-56 bg-slate-800">
                 <img
@@ -59,7 +59,7 @@ export default function ProfileHeader() {
                         Full-Stack Developer • Technology Consultant
                     </p>
                     <p className="mt-1 text-xs text-slate-400">
-                        San Fernando Pampanga, Philippines
+                        Pampanga, Philippines
                     </p>
                 </div>
 

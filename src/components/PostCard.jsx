@@ -1,22 +1,50 @@
 import React, { useState } from 'react';
-import { ThumbsUp, MessageSquare, Share2, Globe, Check } from 'lucide-react';
+import { ThumbsUp, MessageSquare, Share2, Globe, Check, Send } from 'lucide-react';
 import { BiSolidLike } from "react-icons/bi";
 
-export default function PostCard({ id, title, timestamp = 'Just now', children, initialLikes = 1 }) {
+export default function PostCard({
+  id,
+  title,
+  timestamp = 'Just now',
+  children,
+  initialLikes = 1,
+  initialComments = [], // <-- NEW: pass your desired comments here
+}) {
   const [likes, setLikes] = useState(initialLikes);
   const [hasLiked, setHasLiked] = useState(false);
   const [isLikingAnim, setIsLikingAnim] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // ── Comments state ──────────────────────────────────────────────
+  // Hydrate from props; each comment needs at least a `text` field
+  const [comments, setComments] = useState(() =>
+    initialComments.map((c, i) => ({
+      id: c.id ?? Date.now() + i,
+      text: c.text,
+      timestamp:
+        c.timestamp ??
+        new Date().toLocaleString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+        }),
+    }))
+  );
+  const [commentText, setCommentText] = useState('');
+  const [showComments, setShowComments] = useState(initialComments.length > 0);
 
   const handleLike = () => {
     setIsLikingAnim(true);
     setTimeout(() => setIsLikingAnim(false), 300);
 
     if (hasLiked) {
-      setLikes(prev => prev - 1);
+      setLikes((prev) => prev - 1);
       setHasLiked(false);
     } else {
-      setLikes(prev => prev + 1);
+      setLikes((prev) => prev + 1);
       setHasLiked(true);
     }
   };
@@ -27,8 +55,35 @@ export default function PostCard({ id, title, timestamp = 'Just now', children, 
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // ── Add a new comment ─────────────────────────────────────────
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    const text = commentText.trim();
+    if (!text) return;
+
+    const newComment = {
+      id: Date.now(),
+      text,
+      timestamp: new Date().toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      }),
+    };
+
+    setComments((prev) => [...prev, newComment]);
+    setCommentText('');
+    setShowComments(true);
+  };
+
   return (
-    <article id={id} className="mb-6 overflow-hidden transition-all bg-white border shadow-sm rounded-xl border-slate-200 hover:border-slate-300">
+    <article
+      id={id}
+      className="mb-6 overflow-hidden transition-all bg-white border shadow-sm rounded-xl border-slate-200 hover:border-slate-300"
+    >
       {/* Post Header */}
       <div className="flex items-center justify-between p-4 border-b border-slate-100">
         <div className="flex items-center gap-3">
@@ -60,26 +115,26 @@ export default function PostCard({ id, title, timestamp = 'Just now', children, 
       {/* Post Title */}
       {title && (
         <div className="px-5 pt-4">
-          <h2 className="text-xl font-bold tracking-tight text-slate-800">{title}</h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-800">
+            {title}
+          </h2>
         </div>
       )}
 
       {/* Post Body */}
-      <div className="p-5 text-sm leading-relaxed text-slate-700">
-        {children}
-      </div>
+      <div className="p-5 text-sm leading-relaxed text-slate-700">{children}</div>
 
       {/* Social Interactions Bar */}
       <div className="px-5 py-2.5 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs text-slate-500 font-medium">
         <div className="flex items-center gap-1.5">
           <span className="w-5 h-5 rounded-full bg-sky-500 text-white flex items-center justify-center text-[11px]">
-            <BiSolidLike/>
+            <BiSolidLike />
           </span>
           <span>{likes} likes</span>
         </div>
-        <div>
-          <span>0 comments</span>
-        </div>
+        <button onClick={() => setShowComments((s) => !s)} className="hover:underline" >
+          {comments.length} comments
+        </button>
       </div>
 
       {/* Action Buttons */}
@@ -87,22 +142,25 @@ export default function PostCard({ id, title, timestamp = 'Just now', children, 
         {/* Like Button */}
         <button
           onClick={handleLike}
-          className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-2 font-semibold text-xs transition-all active:scale-95 ${hasLiked ? 'text-sky-600 bg-sky-50' : 'text-slate-600 hover:bg-slate-100'
-            }`}
+          className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-2 font-semibold text-xs transition-all active:scale-95 ${
+            hasLiked ? 'text-sky-600 bg-sky-50' : 'text-slate-600 hover:bg-slate-100'
+          }`}
         >
           <ThumbsUp
             size={20}
-            className={`transition-transform duration-200 ${isLikingAnim ? 'scale-125 -rotate-12' : 'scale-100'
-              } ${hasLiked ? 'fill-sky-600' : ''}`}
+            className={`transition-transform duration-200 ${
+              isLikingAnim ? 'scale-125 -rotate-12' : 'scale-100'
+            } ${hasLiked ? 'fill-sky-600' : ''}`}
           />
           <span>{hasLiked ? 'Liked' : 'Like'}</span>
         </button>
 
-        {/* Comment Button (Disabled) */}
+        {/* Comment Button */}
         <button
-          disabled
-          title="Comments are disabled"
-          className="flex items-center justify-center flex-1 gap-2 py-2 text-xs font-semibold rounded-lg cursor-not-allowed text-slate-300"
+          onClick={() => setShowComments((s) => !s)}
+          className={`flex items-center justify-center flex-1 gap-2 py-2 text-xs font-semibold rounded-lg transition-all active:scale-95 ${
+            showComments ? 'text-sky-600 bg-sky-50' : 'text-slate-600 hover:bg-slate-100'
+          }`}
         >
           <MessageSquare size={16} />
           <span>Comment</span>
@@ -113,11 +171,87 @@ export default function PostCard({ id, title, timestamp = 'Just now', children, 
           onClick={handleShare}
           className="relative flex items-center justify-center flex-1 gap-2 py-2 text-xs font-semibold transition-all rounded-lg text-slate-600 hover:bg-slate-100 active:scale-95"
         >
-          {copied ? <Check size={16} className="text-emerald-600" /> : <Share2 size={16} />}
+          {copied ? (
+            <Check size={16} className="text-emerald-600" />
+          ) : (
+            <Share2 size={16} />
+          )}
           <span className={copied ? 'text-emerald-600' : ''}>
             {copied ? 'Link Copied!' : 'Share'}
           </span>
         </button>
+      </div>
+
+      {/* ── Comment Section ───────────────────────────────────────── */}
+      <div
+        className={`border-t border-slate-100 bg-slate-50/30 transition-all duration-300 ease-out overflow-hidden ${
+          showComments ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="p-4 space-y-4">
+          {/* Comment List */}
+          {comments.length === 0 ? (
+            <p className="text-xs text-center text-slate-400">
+              No comments yet. Be the first to comment!
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {comments.map((comment) => (
+                <div key={comment.id} className="flex gap-3">
+                  <img
+                    src="/images/profile.jpg"
+                    alt="John Philip"
+                    className="object-cover w-8 h-8 rounded-full border border-slate-200 shrink-0"
+                  />
+                  <div className="flex-1">
+                    <div className="bg-white border border-slate-200 rounded-xl rounded-tl-sm px-3 py-2 shadow-sm">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-xs font-bold text-slate-900">
+                          John Philip Dela Vega
+                        </span>
+                        <span className="text-[10px] text-slate-400">
+                          • {comment.timestamp}
+                        </span>
+                      </div>
+                      <p className="text-[13px] text-slate-700 leading-relaxed">
+                        {comment.text}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Comment Input */}
+          <form onSubmit={handleAddComment} className="flex items-center gap-2 pt-2">
+            <img
+              src="/images/profile.jpg"
+              alt="John Philip"
+              className="object-cover w-8 h-8 rounded-full border border-slate-200 shrink-0"
+            />
+            <div className="flex-1 flex items-center bg-white border border-slate-200 rounded-full px-3 py-1.5 focus-within:ring-2 focus-within:ring-sky-500/20 focus-within:border-sky-300 transition-all">
+              <input
+                type="text"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Write a comment..."
+                className="flex-1 text-[13px] bg-transparent outline-none text-slate-800 placeholder:text-slate-400"
+              />
+              <button
+                type="submit"
+                disabled={!commentText.trim()}
+                className={`p-1.5 rounded-full transition-colors ${
+                  commentText.trim()
+                    ? 'text-sky-600 hover:bg-sky-50'
+                    : 'text-slate-300 cursor-default'
+                }`}
+              >
+                <Send size={16} />
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </article>
   );
