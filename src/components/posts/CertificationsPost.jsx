@@ -69,7 +69,7 @@ export default function CertificationsPost() {
   ];
 
   return (
-    <PostCard id="certifications" timestamp="1d ago" initialComments={[{ text: "more on my linkedin profile", timestamp: "Jul 31, 2026, 10:24 AM" }]}>
+    <PostCard id="certifications" timestamp="1d ago" initialComments={[{ text: "more on my linkedin profile", timestamp: "Jul 31, 2026, 10:24 AM" }]} initialLikes={3}>
       <div className="space-y-3">
         <p className="text-sm leading-relaxed text-slate-700">
           Here are my certifications and credentials—things I've picked up while building and learning.
