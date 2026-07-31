@@ -49,7 +49,7 @@ export default function NavigationSidebar() {
           <span>Quick Summary</span>
         </div>
         <p className="leading-relaxed text-slate-500">
-          Full-Stack Software Engineer with 4 years building enterprise solutions in OutSystems, React, and Node.js. Expanding into AI development with RAG & LLMs.
+          Interested in Full Stack Development, AI Engineering, and Low-Code Development. Seeking full-time remote or hybrid opportunities.
         </p>
       </div>
     </aside>

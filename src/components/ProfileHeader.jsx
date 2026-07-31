@@ -56,10 +56,10 @@ export default function ProfileHeader() {
                         </div>
                     </div>
                     <p className="text-slate-600 font-medium text-sm mt-0.5">
-                        Full-Stack & AI Developer • Technology Consultant
+                        Full-Stack Developer • Technology Consultant
                     </p>
                     <p className="mt-1 text-xs text-slate-400">
-                        San Fernando, Pampanga, Philippines
+                        San Fernando Pampanga, Philippines
                     </p>
                 </div>
 

@@ -8,6 +8,7 @@ import ProjectsPost from './components/posts/ProjectsPost';
 import CertificationsPost from './components/posts/CertificationsPost';
 import ContactPost from './components/posts/ContactPost';
 import ChatWidget from './components/ChatWidget';
+import KeyboardPost from './components/posts/KeyboardPost';
 
 export default function App() {
   return (
@@ -24,7 +25,7 @@ export default function App() {
             </span>
           </div>
           <span className="px-3 py-1 text-xs font-semibold rounded-full text-slate-500 bg-slate-100">
-            Portfolio Feed
+            jayplought@gmailcom
           </span>
         </div>
       </header>
@@ -40,6 +41,7 @@ export default function App() {
             <ExperiencePost />
             <ProjectsPost />
             <CertificationsPost />
+            <KeyboardPost/>
             <ContactPost />
           </div>
 

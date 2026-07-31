@@ -47,7 +47,7 @@ export default function PostCard({ id, title, timestamp = 'Just now', children, 
               </span>
             </div>
             <p className="flex items-center gap-1 text-xs text-slate-500">
-              <span>Full-Stack & AI Developer</span>
+              <span>Full-Stack Developer</span>
               <span>•</span>
               <span>{timestamp}</span>
               <span>•</span>
