@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import PostCard from '../PostCard';
 import { X } from 'lucide-react';
+import { getThemeTokens } from '../../theme';
 
 export default function KeyboardPost() {
+    const theme = useSelector((state) => state.theme.value);
+    const tokens = getThemeTokens(theme);
+    const isDark = theme === 'dark';
     const [isImageExpanded, setIsImageExpanded] = useState(false);
 
     // Close the expanded photo on Escape key
@@ -18,14 +23,14 @@ export default function KeyboardPost() {
     return (
         <PostCard id="keyboard-setup" timestamp="Just now">
             <div>
-                <p className="text-sm leading-relaxed text-slate-800 pb-1">
+                <p className={`pb-1 text-sm leading-relaxed ${tokens.cardText}`}>
                     My custom mechanical keyboard build breakdown and current daily driver:
                 </p>
 
                 {/* Specs List */}
-                <p><span className="font-semibold text-slate-900">Keyboard:</span> Akko MOD005 RGB Mechanical Keyboard</p>
-                <p><span className="font-semibold text-slate-900">Switches:</span> Akko V5 Creamy Yellow Pro Switch</p>
-                <p><span className="font-semibold text-slate-900">Keycaps:</span> Akko Black & Bronze PBT Keycaps Set ASA (158 keys)</p>
+                <p className={tokens.cardText}><span className={`font-semibold ${tokens.cardTitle}`}>Keyboard:</span> Akko MOD005 RGB Mechanical Keyboard</p>
+                <p className={tokens.cardText}><span className={`font-semibold ${tokens.cardTitle}`}>Switches:</span> Akko V5 Creamy Yellow Pro Switch</p>
+                <p className={tokens.cardText}><span className={`font-semibold ${tokens.cardTitle}`}>Keycaps:</span> Akko Black & Bronze PBT Keycaps Set ASA (158 keys)</p>
 
                 {/* Image Display */}
                 <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-900 mt-3">

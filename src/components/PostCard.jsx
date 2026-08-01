@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ThumbsUp, MessageSquare, Share2, Globe, Check, Send } from 'lucide-react';
 import { BiSolidLike } from "react-icons/bi";
+import { getThemeTokens } from '../theme';
 
 export default function PostCard({
   id,
@@ -8,15 +10,27 @@ export default function PostCard({
   timestamp = 'Just now',
   children,
   initialLikes = 1,
-  initialComments = [], // <-- NEW: pass your desired comments here
+  initialComments = [],
 }) {
+  const theme = useSelector((state) => state.theme.value);
+  const tokens = getThemeTokens(theme);
+  const isDark = theme === 'dark';
+  const surfaceClass = tokens.card;
+  const borderClass = tokens.border;
+  const mutedText = tokens.muted;
+  const primaryText = tokens.cardTitle;
+  const secondaryText = tokens.cardText;
+  const subtleSurface = tokens.cardSoft;
+  const inputClass = tokens.input;
+  const buttonGhost = tokens.buttonGhost;
+  const activeButton = tokens.activeButton;
+  const commentBubble = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200';
+
   const [likes, setLikes] = useState(initialLikes);
   const [hasLiked, setHasLiked] = useState(false);
   const [isLikingAnim, setIsLikingAnim] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // ── Comments state ──────────────────────────────────────────────
-  // Hydrate from props; each comment needs at least a `text` field
   const [comments, setComments] = useState(() =>
     initialComments.map((c, i) => ({
       id: c.id ?? Date.now() + i,
@@ -62,7 +76,6 @@ export default function PostCard({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // ── Add a new comment ─────────────────────────────────────────
   const handleAddComment = (e) => {
     e.preventDefault();
     const text = commentText.trim();
@@ -89,10 +102,10 @@ export default function PostCard({
   return (
     <article
       id={id}
-      className="mb-6 overflow-hidden transition-all bg-white border shadow-sm rounded-xl border-slate-200 hover:border-slate-300"
+      className={`mb-6 overflow-hidden border shadow-sm rounded-xl transition-all ${surfaceClass}`}
     >
       {/* Post Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-100" onClick={() => scrollToSection("topHeader")}>
+      <div className={`flex items-center justify-between p-4 border-b ${borderClass}`} onClick={() => scrollToSection('topHeader')}>
         <div className="flex items-center gap-3">
           <img
             src="/images/profile.jpg"
@@ -101,19 +114,19 @@ export default function PostCard({
           />
           <div>
             <div className="flex items-center gap-1.5">
-              <h3 className="text-sm font-bold cursor-pointer text-slate-900 hover:underline" onClick={() => scrollToSection("topHeader")}>
+              <h3 className={`text-sm font-bold cursor-pointer hover:underline ${primaryText}`} onClick={() => scrollToSection('topHeader')}>
                 John Philip Dela Vega
               </h3>
-              <span className="bg-sky-100 text-sky-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+              <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${isDark ? 'bg-sky-500/15 text-sky-300' : 'bg-sky-100 text-sky-700'}`}>
                 Author
               </span>
             </div>
-            <p className="flex items-center gap-1 text-xs text-slate-500">
+            <p className={`flex items-center gap-1 text-xs ${mutedText}`}>
               <span>Full-Stack Developer</span>
               <span>•</span>
               <span>{timestamp}</span>
               <span>•</span>
-              <Globe size={12} className="text-slate-400" />
+              <Globe size={12} className={isDark ? 'text-slate-500' : 'text-slate-400'} />
             </p>
           </div>
         </div>
@@ -122,61 +135,54 @@ export default function PostCard({
       {/* Post Title */}
       {title && (
         <div className="px-5 pt-4">
-          <h2 className="text-xl font-bold tracking-tight text-slate-800">
+          <h2 className={`text-xl font-bold tracking-tight ${secondaryText}`}>
             {title}
           </h2>
         </div>
       )}
 
       {/* Post Body */}
-      <div className="p-5 text-sm leading-relaxed text-slate-700">{children}</div>
+      <div className={`p-5 text-sm leading-relaxed ${secondaryText}`}>{children}</div>
 
       {/* Social Interactions Bar */}
-      <div className="px-5 py-2.5 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs text-slate-500 font-medium">
+      <div className={`flex items-center justify-between border-t px-5 py-2.5 text-xs font-medium ${borderClass} ${subtleSurface} ${mutedText}`}>
         <div className="flex items-center gap-1.5">
-          <span className="w-5 h-5 rounded-full bg-sky-500 text-white flex items-center justify-center text-[11px]">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[11px] text-white">
             <BiSolidLike />
           </span>
           <span>{likes} likes</span>
         </div>
-        <button onClick={() => setShowComments((s) => !s)} className="hover:underline" >
+        <button onClick={() => setShowComments((s) => !s)} className="hover:underline">
           {comments.length} comments
         </button>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between px-2 py-1 border-t border-slate-100">
-        {/* Like Button */}
+      <div className={`flex items-center justify-between border-t px-2 py-1 ${borderClass}`}>
         <button
           onClick={handleLike}
-          className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-2 font-semibold text-xs transition-all active:scale-95 ${
-            hasLiked ? 'text-sky-600 bg-sky-50' : 'text-slate-600 hover:bg-slate-100'
-          }`}
+          className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-xs font-semibold transition-all active:scale-95 ${hasLiked ? activeButton : `${buttonGhost}`
+            }`}
         >
           <ThumbsUp
             size={20}
-            className={`transition-transform duration-200 ${
-              isLikingAnim ? 'scale-125 -rotate-12' : 'scale-100'
-            } ${hasLiked ? 'fill-sky-600' : ''}`}
+            className={`transition-transform duration-200 ${isLikingAnim ? 'scale-125 -rotate-12' : 'scale-100'} ${hasLiked ? 'fill-sky-600' : ''}`}
           />
           <span>{hasLiked ? 'Liked' : 'Like'}</span>
         </button>
 
-        {/* Comment Button */}
         <button
           onClick={() => setShowComments((s) => !s)}
-          className={`flex items-center justify-center flex-1 gap-2 py-2 text-xs font-semibold rounded-lg transition-all active:scale-95 ${
-            showComments ? 'text-sky-600 bg-sky-50' : 'text-slate-600 hover:bg-slate-100'
-          }`}
+          className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-xs font-semibold transition-all active:scale-95 ${showComments ? activeButton : `${buttonGhost}`
+            }`}
         >
           <MessageSquare size={16} />
           <span>Comment</span>
         </button>
 
-        {/* Share Button */}
         <button
           onClick={handleShare}
-          className="relative flex items-center justify-center flex-1 gap-2 py-2 text-xs font-semibold transition-all rounded-lg text-slate-600 hover:bg-slate-100 active:scale-95"
+          className={`relative flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-xs font-semibold transition-all active:scale-95 ${buttonGhost}`}
         >
           {copied ? (
             <Check size={16} className="text-emerald-600" />
@@ -189,16 +195,13 @@ export default function PostCard({
         </button>
       </div>
 
-      {/* ── Comment Section ───────────────────────────────────────── */}
       <div
-        className={`border-t border-slate-100 bg-slate-50/30 transition-all duration-300 ease-out overflow-hidden ${
-          showComments ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
+        className={`overflow-hidden border-t transition-all duration-300 ease-out ${borderClass} ${subtleSurface} ${showComments ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
       >
-        <div className="p-4 space-y-4">
-          {/* Comment List */}
+        <div className="space-y-4 p-4">
           {comments.length === 0 ? (
-            <p className="text-xs text-center text-slate-400">
+            <p className={`text-center text-xs ${mutedText}`}>
               No comments yet. Be the first to comment!
             </p>
           ) : (
@@ -208,19 +211,19 @@ export default function PostCard({
                   <img
                     src="/images/profile.jpg"
                     alt="John Philip"
-                    className="object-cover w-8 h-8 rounded-full border border-slate-200 shrink-0"
+                    className="h-8 w-8 shrink-0 rounded-full border border-slate-200 object-cover"
                   />
                   <div className="flex-1">
-                    <div className="bg-white border border-slate-200 rounded-xl rounded-tl-sm px-3 py-2 shadow-sm">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-xs font-bold text-slate-900">
+                    <div className={`rounded-xl rounded-tl-sm border px-3 py-2 shadow-sm ${commentBubble}`}>
+                      <div className="mb-0.5 flex items-center gap-2">
+                        <span className={`text-xs font-bold ${primaryText}`}>
                           John Philip Dela Vega
                         </span>
-                        <span className="text-[10px] text-slate-400">
+                        <span className={`text-[10px] ${mutedText}`}>
                           • {comment.timestamp}
                         </span>
                       </div>
-                      <p className="text-[13px] text-slate-700 leading-relaxed">
+                      <p className={`text-[13px] leading-relaxed ${secondaryText}`}>
                         {comment.text}
                       </p>
                     </div>
@@ -230,29 +233,27 @@ export default function PostCard({
             </div>
           )}
 
-          {/* Comment Input */}
           <form onSubmit={handleAddComment} className="flex items-center gap-2 pt-2">
             <img
               src="/images/profile.jpg"
               alt="John Philip"
-              className="object-cover w-8 h-8 rounded-full border border-slate-200 shrink-0"
+              className="h-8 w-8 shrink-0 rounded-full border border-slate-200 object-cover"
             />
-            <div className="flex-1 flex items-center bg-white border border-slate-200 rounded-full px-3 py-1.5 focus-within:ring-2 focus-within:ring-sky-500/20 focus-within:border-sky-300 transition-all">
+            <div className={`flex flex-1 items-center rounded-full border px-3 py-1.5 transition-all focus-within:ring-2 focus-within:ring-sky-500/20 focus-within:border-sky-300 ${inputClass}`}>
               <input
                 type="text"
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="Write a comment..."
-                className="flex-1 text-[13px] bg-transparent outline-none text-slate-800 placeholder:text-slate-400"
+                className="flex-1 bg-transparent text-[13px] outline-none"
               />
               <button
                 type="submit"
                 disabled={!commentText.trim()}
-                className={`p-1.5 rounded-full transition-colors ${
-                  commentText.trim()
-                    ? 'text-sky-600 hover:bg-sky-50'
-                    : 'text-slate-300 cursor-default'
-                }`}
+                className={`rounded-full p-1.5 transition-colors ${commentText.trim()
+                  ? 'text-sky-600 hover:bg-sky-50'
+                  : 'text-slate-300 cursor-default'
+                  }`}
               >
                 <Send size={16} />
               </button>

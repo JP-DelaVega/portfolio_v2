@@ -1,7 +1,18 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Home, Code, Briefcase, FolderGit2, Award, Mail, Bookmark } from 'lucide-react';
+import { getThemeTokens } from '../theme';
 
 export default function NavigationSidebar() {
+  const theme = useSelector((state) => state.theme.value);
+  const tokens = getThemeTokens(theme);
+  const cardClasses = `${tokens.card} shadow-sm`;
+  const buttonClasses = `${tokens.buttonGhost} ${theme === 'dark' ? 'hover:text-sky-400' : 'hover:text-sky-600'}`;
+  const iconClasses = theme === 'dark' ? 'text-slate-500 group-hover:text-sky-400' : 'text-slate-400 group-hover:text-sky-600';
+  const textClasses = tokens.softText;
+  const headingClasses = tokens.cardTitle;
+  const mutedClasses = tokens.muted;
+
   const navItems = [
     { id: 'hero', label: 'Home / Overview', icon: Home },
     { id: 'skills', label: 'Technical Skills', icon: Code },
@@ -21,8 +32,8 @@ export default function NavigationSidebar() {
   return (
     <aside className="sticky space-y-4 top-20">
       {/* Navigation Widget */}
-      <div className="p-4 bg-white border shadow-sm rounded-xl border-slate-200">
-        <h2 className="px-2 mb-3 text-xs font-bold tracking-wider uppercase text-slate-400">
+      <div className={`rounded-xl border p-4 ${cardClasses}`}>
+        <h2 className={`px-2 mb-3 text-xs font-bold tracking-wider uppercase ${textClasses}`}>
           Navigation
         </h2>
         <nav className="space-y-1">
@@ -32,9 +43,9 @@ export default function NavigationSidebar() {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 hover:bg-sky-50 hover:text-sky-600 font-medium text-xs transition-all text-left group"
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-xs transition-all text-left group ${buttonClasses}`}
               >
-                <Icon size={16} className="transition-colors text-slate-400 group-hover:text-sky-600" />
+                <Icon size={16} className={`transition-colors ${iconClasses}`} />
                 <span>{item.label}</span>
               </button>
             );
@@ -43,12 +54,12 @@ export default function NavigationSidebar() {
       </div>
 
       {/* Quick Bio / Widget */}
-      <div className="p-4 text-xs bg-white border shadow-sm rounded-xl border-slate-200 text-slate-600">
-        <div className="flex items-center gap-2 mb-2 font-bold text-slate-800">
+      <div className={`rounded-xl border p-4 text-xs ${cardClasses} ${textClasses}`}>
+        <div className={`mb-2 flex items-center gap-2 font-bold ${headingClasses}`}>
           <Bookmark size={14} className="text-sky-600" />
           <span>Quick Summary</span>
         </div>
-        <p className="leading-relaxed text-slate-500">
+        <p className={`leading-relaxed ${mutedClasses}`}>
           Interested in Full Stack Development, AI Engineering, and Low-Code Development. Seeking full-time remote or hybrid opportunities.
         </p>
       </div>

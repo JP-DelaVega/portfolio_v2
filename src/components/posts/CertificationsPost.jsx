@@ -1,5 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PostCard from '../PostCard';
+import { getThemeTokens } from '../../theme';
 import {
   FaEnvira,      // MongoDB green leaf / database icon alternative
   FaBolt,        // Vantiq event-driven icon
@@ -9,6 +11,8 @@ import {
 } from 'react-icons/fa6';
 
 export default function CertificationsPost() {
+  const theme = useSelector((state) => state.theme.value);
+  const tokens = getThemeTokens(theme);
   const certs = [
     {
       title: 'Building GenAI Applications with MongoDB',
@@ -71,7 +75,7 @@ export default function CertificationsPost() {
   return (
     <PostCard id="certifications" timestamp="1d ago" initialComments={[{ text: "more on my linkedin profile", timestamp: "Jul 31, 2026, 10:24 AM" }]} initialLikes={3}>
       <div className="space-y-3">
-        <p className="text-sm leading-relaxed text-slate-700">
+        <p className={`text-sm leading-relaxed ${tokens.cardText}`}>
           Here are my certifications and credentials—things I've picked up while building and learning.
         </p>
 
@@ -84,8 +88,8 @@ export default function CertificationsPost() {
                   <Icon size={16} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold leading-snug text-slate-800">{c.title}</p>
-                  <p className="text-[11px] text-slate-500">{c.issuer} • {c.year}</p>
+                  <p className={`text-xs font-semibold leading-snug ${tokens.cardTitle}`}>{c.title}</p>
+                  <p className={`text-[11px] ${tokens.muted}`}>{c.issuer} • {c.year}</p>
                 </div>
               </div>
             );

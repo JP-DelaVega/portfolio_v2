@@ -1,8 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PostCard from '../PostCard';
-import { Code2, Laptop, Server, Brain, Box, Cloud } from 'lucide-react';
+import { getThemeTokens } from '../../theme';
 
 export default function SkillsPost() {
+  const theme = useSelector((state) => state.theme.value);
+  const tokens = getThemeTokens(theme);
   const skills = {
     Languages: ['JavaScript', 'TypeScript', 'Python', 'Java', 'SQL'],
     Frontend: ['React', 'Vue.js', 'Tailwind CSS', 'HTML5', 'CSS3', 'Figma'],
@@ -13,20 +16,20 @@ export default function SkillsPost() {
   };
 
   return (
-    <PostCard id="skills" timestamp="1h ago">
-      <div className="space-y-4 text-sm leading-relaxed text-slate-800">
+    <PostCard id="skills" timestamp="1h ago" theme={theme}>
+      <div className={`space-y-4 text-sm leading-relaxed ${tokens.cardText}`}>
         <p>
-          Here are my skills. The tools and tech I work with day to day. 
+          Here are my skills. The tools and tech I work with day to day.
           Always learning, always shipping.
         </p>
 
         <div className="space-y-3">
           {Object.entries(skills).map(([category, tags]) => (
             <p key={category}>
-              <span className="font-semibold text-slate-900">{category}:</span>{' '}
+              <span className={`font-semibold ${tokens.cardTitle}`}>{category}:</span>{' '}
               {tags.map((tag, i) => (
                 <span key={tag}>
-                  <span className="text-slate-700">
+                  <span className={tokens.cardText}>
                     {tag}
                   </span>
                   {i < tags.length - 1 ? ', ' : ''}

@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import PostCard from '../PostCard';
-import { ExternalLink, X } from 'lucide-react';
-import { LuGithub } from 'react-icons/lu';
+import { X } from 'lucide-react';
+import { getThemeTokens } from '../../theme';
 
 export default function ProjectsPost() {
+  const theme = useSelector((state) => state.theme.value);
+  const tokens = getThemeTokens(theme);
+  const isDark = theme === 'dark';
   // Holds the currently expanded project ({ image, title }) or null when closed
   const [expandedProject, setExpandedProject] = useState(null);
 
@@ -48,7 +52,7 @@ export default function ProjectsPost() {
     <PostCard id="projects" timestamp="5h ago">
       <div className="space-y-3">
         {/* Caption */}
-        <p className="text-sm leading-relaxed text-slate-800">
+        <p className={`text-sm leading-relaxed ${tokens.cardText}`}>
           Here are some of the projects that I built. things I shipped to solve problems I actually had.
         </p>
 
@@ -57,7 +61,7 @@ export default function ProjectsPost() {
           {projects.map((proj, idx) => (
             <div key={idx}>
               {/* Separator line (not on first item) */}
-              {idx > 0 && <div className="my-4 border-t border-slate-200" />}
+              {idx > 0 && <div className={`my-4 border-t ${tokens.borderStrong}`} />}
 
               <div className="flex gap-3">
                 {/* Small image with border — click to expand */}
@@ -66,7 +70,7 @@ export default function ProjectsPost() {
                   onClick={() => setExpandedProject(proj)}
                   className="block shrink-0"
                 >
-                  <div className="w-24 h-24 overflow-hidden border rounded-lg bg-slate-500 border-slate-200">
+                  <div className={`h-24 w-24 overflow-hidden rounded-lg border bg-slate-500 ${tokens.borderStrong}`}>
                     <img
                       src={proj.image}
                       alt={proj.title}
@@ -77,12 +81,12 @@ export default function ProjectsPost() {
 
                 {/* Text on the right */}
                 <div className="flex-1 min-w-0 py-0.5">
-                  <h3 className="text-sm font-bold text-slate-900">{proj.title}</h3>
-                  <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">{proj.description}</p>
+                  <h3 className={`text-sm font-bold ${tokens.cardTitle}`}>{proj.title}</h3>
+                  <p className={`mt-0.5 text-xs leading-relaxed ${tokens.softText}`}>{proj.description}</p>
 
 
                   {/* Casual links */}
-                  <p className="text-[12px] text-slate-500 mt-0">
+                  <p className={`mt-0 text-[12px] ${tokens.muted}`}>
                     You can access it{' '}
                     <a
                       href={proj.link}
@@ -104,7 +108,7 @@ export default function ProjectsPost() {
                   </p>
 
                   {/* Hashtag stacks */}
-                  <p className="text-[11px] text-sky-600 mt-4 leading-relaxed">
+                  <p className={`mt-4 text-[11px] leading-relaxed ${tokens.accent}`}>
                     {proj.stacks.map((stack, i) => (
                       <span key={i} className="cursor-pointer hover:underline">
                         #{stack.replace(/\s+/g, '').replace(/\./g, '')}
