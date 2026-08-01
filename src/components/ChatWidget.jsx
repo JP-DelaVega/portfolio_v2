@@ -304,7 +304,7 @@ export default function ChatWidget() {
           }`}
       >
         <div className="relative">
-          <div className={`w-15 h-15 rounded-full border-2 shadow-2xl shadow-pink-300 overflow-hidden transition-transform hover:scale-105 active:scale-95 ${isDark ? 'border-slate-700 bg-slate-900' : 'border-gray-200 bg-white'}`}>
+          <div className={`w-15 h-15 rounded-full border-2  overflow-hidden transition-transform hover:scale-105 active:scale-95 ${isDark ? 'border-slate-700 bg-slate-900 shadow-l'  : 'border-gray-200 bg-white shadow-2xl shadow-pink-300 '}`}>
             <div className="flex items-center justify-center w-full h-full object-cover">
               <Bot size={33} />
             </div>
