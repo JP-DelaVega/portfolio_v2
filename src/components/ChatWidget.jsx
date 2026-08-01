@@ -304,7 +304,7 @@ export default function ChatWidget() {
           }`}
       >
         <div className="relative">
-          <div className={`w-15 h-15 rounded-full border-2  overflow-hidden transition-transform hover:scale-105 active:scale-95 ${isDark ? 'border-slate-700 bg-slate-900 shadow-l'  : 'border-gray-200 bg-white shadow-2xl shadow-pink-300 '}`}>
+          <div className={`w-15 h-15 rounded-full border-2  overflow-hidden transition-transform hover:scale-105 active:scale-95 ${isDark ? 'border-slate-700 bg-slate-900 shadow-l' : 'border-gray-200 bg-white shadow-2xl shadow-pink-300 '}`}>
             <div className="flex items-center justify-center w-full h-full object-cover">
               <Bot size={33} />
             </div>
@@ -453,7 +453,7 @@ export default function ChatWidget() {
         )}
 
         {/* Service Notice Banner */}
-        <div className={`shrink-0 border-b px-3 py-1.5 text-[11px] ${isDark ? 'border-amber-900/50 bg-amber-950/40 text-amber-300' : 'border-amber-100 bg-amber-50 text-amber-700'}`}>
+        <div className={`flex items-center gap-1.5 shrink-0 border-b px-3 py-1.5 text-[11px] ${isDark ? 'border-amber-900/50 bg-amber-950/40 text-amber-300' : 'border-amber-100 bg-amber-50 text-amber-700'}`}>
           <AlertCircle size={12} className="shrink-0" />
           <span>Running on free web services. Responses may take longer to load.</span>
         </div>
