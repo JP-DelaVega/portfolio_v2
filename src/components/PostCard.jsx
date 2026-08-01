@@ -24,7 +24,9 @@ export default function PostCard({
   const inputClass = tokens.input;
   const buttonGhost = tokens.buttonGhost;
   const activeButton = tokens.activeButton;
-  const commentBubble = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200';
+ const commentBubble = isDark
+  ? 'bg-slate-800/80 border-slate-600/50 text-slate-200'
+  : 'bg-white border-slate-200 text-slate-800';
 
   const [likes, setLikes] = useState(initialLikes);
   const [hasLiked, setHasLiked] = useState(false);

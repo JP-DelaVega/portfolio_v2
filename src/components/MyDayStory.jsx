@@ -1,19 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { LuX, LuChevronLeft, LuChevronRight } from 'react-icons/lu';
+import { LuX, LuChevronLeft, LuChevronRight, LuHeart } from 'react-icons/lu';
 
-/**
- * Full-screen "My Day" style story viewer.
- *
- * Props:
- * - isOpen: boolean — whether the viewer is shown
- * - onClose: () => void — called when the viewer should close
- * - stories: [{ id, src, duration }] — list of story slides
- * - name: string — display name in the header
- * - avatarSrc: string — small avatar shown in the header
- */
 export default function MyDayStory({ isOpen, onClose, stories = [], name = '', avatarSrc = '' }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [progress, setProgress] = useState(0);
+    const [heart, setHeart] = useState(null); // { id, x, y } or null
     const progressRef = useRef(0);
     const rafRef = useRef(null);
     const lastTimeRef = useRef(null);
@@ -27,7 +18,6 @@ export default function MyDayStory({ isOpen, onClose, stories = [], name = '', a
         lastTimeRef.current = null;
     }, []);
 
-    // Reset to first slide every time the viewer opens
     useEffect(() => {
         if (isOpen) resetToStart();
     }, [isOpen, resetToStart]);
@@ -45,7 +35,7 @@ export default function MyDayStory({ isOpen, onClose, stories = [], name = '', a
                 lastTimeRef.current = null;
                 return i + 1;
             }
-            return i; // stays on last story — does not auto-close
+            return i;
         });
     }, [stories.length]);
 
@@ -61,10 +51,19 @@ export default function MyDayStory({ isOpen, onClose, stories = [], name = '', a
         });
     }, []);
 
-    // Auto-advance with requestAnimationFrame
+    // Heart pop animation
+    const triggerHeart = useCallback((e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const id = Date.now();
+        setHeart({ id, x, y });
+        setTimeout(() => setHeart((h) => (h?.id === id ? null : h)), 800);
+    }, []);
+
+    // Auto-advance
     useEffect(() => {
         if (!isOpen || !hasStories) return;
-
         const duration = stories[currentIndex]?.duration ?? 5000;
 
         const tick = (timestamp) => {
@@ -122,7 +121,7 @@ export default function MyDayStory({ isOpen, onClose, stories = [], name = '', a
 
             {/* Desktop: buttons on sides | Mobile: buttons below */}
             <div className="flex items-center gap-2 sm:gap-3 w-full max-w-lg px-4 sm:px-0">
-                {/* Prev — desktop only (left side) */}
+                {/* Prev — desktop only */}
                 <button
                     onClick={(e) => { e.stopPropagation(); goPrev(); }}
                     disabled={currentIndex === 0}
@@ -134,7 +133,7 @@ export default function MyDayStory({ isOpen, onClose, stories = [], name = '', a
 
                 {/* Story card */}
                 <div
-                    className="relative flex-1 aspect-[9/16] sm:aspect-[4/5] max-h-[75vh] sm:max-h-[80vh] bg-black rounded-xl overflow-hidden shadow-2xl"
+                    className="relative flex-1 aspect-[9/16] sm:aspect-[4/5] max-h-[75vh] sm:max-h-[80vh] bg-black rounded-xl overflow-hidden shadow-2xl select-none"
                     onClick={(e) => e.stopPropagation()}
                 >
                     {/* Progress bars */}
@@ -167,23 +166,47 @@ export default function MyDayStory({ isOpen, onClose, stories = [], name = '', a
                         </div>
                     </div>
 
-                    {/* Story image */}
-                    <img
-                        key={current.id}
-                        src={current.src}
-                        alt={`Story ${currentIndex + 1}`}
-                        className="h-full w-full object-cover animate-fade-in"
-                        loading="eager"
-                    />
+                    {/* Story image with double-click heart */}
+                    <div
+                        className="relative h-full w-full"
+                        onDoubleClick={triggerHeart}
+                    >
+                        <img
+                            key={current.id}
+                            src={current.src}
+                            alt={`Story ${currentIndex + 1}`}
+                            className="h-full w-full object-cover animate-fade-in"
+                            loading="eager"
+                            draggable={false}
+                        />
 
-                    {/* Tap zones (mobile-friendly fallback) */}
+                        {/* Heart pop animation */}
+                        {heart && (
+                            <div
+                                className="absolute pointer-events-none z-40 heart-pop"
+                                style={{
+                                    left: heart.x,
+                                    top: heart.y,
+                                    transform: 'translate(-50%, -50%)',
+                                }}
+                            >
+                                <LuHeart
+                                    size={80}
+                                    className="text-rose-500 fill-rose-500 drop-shadow-lg"
+                                    strokeWidth={1.5}
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Tap zones (mobile) */}
                     <div className="absolute inset-0 flex z-20 sm:hidden">
                         <div className="w-1/2 h-full" onClick={(e) => { e.stopPropagation(); goPrev(); }} />
                         <div className="w-1/2 h-full" onClick={(e) => { e.stopPropagation(); goNext(); }} />
                     </div>
                 </div>
 
-                {/* Next — desktop only (right side) */}
+                {/* Next — desktop only */}
                 <button
                     onClick={(e) => { e.stopPropagation(); goNext(); }}
                     disabled={currentIndex === stories.length - 1}
@@ -194,7 +217,7 @@ export default function MyDayStory({ isOpen, onClose, stories = [], name = '', a
                 </button>
             </div>
 
-            {/* Mobile nav buttons — below the card */}
+            {/* Mobile nav buttons */}
             <div className="flex sm:hidden items-center gap-6 mt-4">
                 <button
                     onClick={(e) => { e.stopPropagation(); goPrev(); }}
@@ -214,15 +237,6 @@ export default function MyDayStory({ isOpen, onClose, stories = [], name = '', a
                 </button>
             </div>
 
-            <style>{`
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: scale(0.98); }
-                    to   { opacity: 1; transform: scale(1); }
-                }
-                .animate-fade-in {
-                    animation: fadeIn 0.3s ease-out;
-                }
-            `}</style>
         </div>
     );
 }
