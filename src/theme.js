@@ -35,7 +35,7 @@ export const THEME_TOKENS = {
     page: "bg-[#1e1e1e] text-[#cccccc]",
     header: "border-[#3e3e42] bg-[#252526]/95 backdrop-blur-sm",
     headerText: "text-[#e8e8e8]",
-    card: "bg-[#252526] border-[#3e3e42] hover:border-[#4e4e52] hover:bg-[#2a2a2b]",
+    card: "bg-[#252526] border-[#3e3e42] hover:border-[#4e4e52]",
     cardSoft: "bg-[#2d2d30]/40",
     cardMuted: "text-[#808080]",
     cardText: "text-[#cccccc]",

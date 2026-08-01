@@ -107,11 +107,9 @@ export default function PostCard({
       {/* Post Header */}
       <div className={`flex items-center justify-between p-4 border-b ${borderClass}`} onClick={() => scrollToSection('topHeader')}>
         <div className="flex items-center gap-3">
-          <img
-            src="/images/profile.jpg"
-            alt="John Philip"
-            className="object-cover border rounded-full w-11 h-11 border-slate-200 ring-2 ring-sky-500/20"
-          />
+          <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full border border-slate-200 ring-2 ring-sky-500/20">
+            <img src="/images/profile.jpg" alt="John Philip" className="h-full w-full object-cover" />
+          </div>
           <div>
             <div className="flex items-center gap-1.5">
               <h3 className={`text-sm font-bold cursor-pointer hover:underline ${primaryText}`} onClick={() => scrollToSection('topHeader')}>
@@ -208,11 +206,9 @@ export default function PostCard({
             <div className="space-y-3">
               {comments.map((comment) => (
                 <div key={comment.id} className="flex gap-3">
-                  <img
-                    src="/images/profile.jpg"
-                    alt="John Philip"
-                    className="h-8 w-8 shrink-0 rounded-full border border-slate-200 object-cover"
-                  />
+                  <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full border border-slate-200">
+                    <img src="/images/profile.jpg" alt="John Philip" className="h-full w-full object-cover" />
+                  </div>
                   <div className="flex-1">
                     <div className={`rounded-xl rounded-tl-sm border px-3 py-2 shadow-sm ${commentBubble}`}>
                       <div className="mb-0.5 flex items-center gap-2">
@@ -234,11 +230,9 @@ export default function PostCard({
           )}
 
           <form onSubmit={handleAddComment} className="flex items-center gap-2 pt-2">
-            <img
-              src="/images/profile.jpg"
-              alt="John Philip"
-              className="h-8 w-8 shrink-0 rounded-full border border-slate-200 object-cover"
-            />
+            <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full border border-slate-200">
+              <img src="/images/profile.jpg" alt="John Philip" className="h-full w-full object-cover" />
+            </div>
             <div className={`flex flex-1 items-center rounded-full border px-3 py-1.5 transition-all focus-within:ring-2 focus-within:ring-sky-500/20 focus-within:border-sky-300 ${inputClass}`}>
               <input
                 type="text"

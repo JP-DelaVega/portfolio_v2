@@ -74,7 +74,7 @@ export default function ProjectsPost() {
                     <img
                       src={proj.image}
                       alt={proj.title}
-                      className="object-cover w-full h-full transition-all cursor-pointer hover:brightness-95"
+                      className="h-full w-full object-cover transition-all cursor-pointer hover:brightness-95"
                     />
                   </div>
                 </button>
@@ -128,7 +128,7 @@ export default function ProjectsPost() {
       {expandedProject && (
         <div
           onClick={() => setExpandedProject(null)}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300"
         >
           {/* Close Button */}
           <button
@@ -142,17 +142,19 @@ export default function ProjectsPost() {
           {/* Image + caption: stop propagation so clicking it doesn't close the modal */}
           <div
             onClick={(e) => e.stopPropagation()}
-            className="flex flex-col items-center max-w-[90vw] max-h-[85vh]"
+            className="flex flex-col items-center max-w-[90vw] max-h-[85vh] animate-image-modal"
           >
             <img
               src={expandedProject.image}
               alt={expandedProject.title}
-              className="max-w-[90vw] max-h-[75vh] rounded-lg object-contain shadow-2xl"
+              className="max-h-[75vh] max-w-[90vw] rounded-lg object-contain shadow-2xl"
+              loading="eager"
             />
             <p className="mt-3 text-sm font-semibold text-white">{expandedProject.title}</p>
           </div>
         </div>
       )}
+
     </PostCard>
   );
 }

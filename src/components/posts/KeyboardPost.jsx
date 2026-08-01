@@ -33,12 +33,12 @@ export default function KeyboardPost() {
                 <p className={tokens.cardText}><span className={`font-semibold ${tokens.cardTitle}`}>Keycaps:</span> Akko Black & Bronze PBT Keycaps Set ASA (158 keys)</p>
 
                 {/* Image Display */}
-                <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-900 mt-3">
+                <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-900">
                     <img
                         src="/images/keyboard.jpg"
                         alt="Akko MOD005 Custom Mechanical Keyboard"
                         onClick={() => setIsImageExpanded(true)}
-                        className="object-cover w-full max-h-100 cursor-pointer transition-all hover:brightness-95"
+                        className="w-full max-h-100 cursor-pointer object-cover transition-all hover:brightness-95"
                     />
                 </div>
             </div>
@@ -47,7 +47,7 @@ export default function KeyboardPost() {
             {isImageExpanded && (
                 <div
                     onClick={() => setIsImageExpanded(false)}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+                    className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300"
                 >
                     {/* Close Button */}
                     <button
@@ -63,10 +63,24 @@ export default function KeyboardPost() {
                         src="/images/keyboard.jpg"
                         alt="Akko MOD005 Custom Mechanical Keyboard"
                         onClick={(e) => e.stopPropagation()}
-                        className="max-w-[90vw] max-h-[85vh] rounded-lg object-contain shadow-2xl"
+                        className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain shadow-2xl animate-image-modal"
+                        loading="eager"
                     />
                 </div>
             )}
+
+            <style>{`
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.96);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+            `}</style>
         </PostCard>
     );
 }
