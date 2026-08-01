@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PostCard from '../PostCard';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, X } from 'lucide-react';
 import { LuGithub } from 'react-icons/lu';
 
 export default function ProjectsPost() {
+  // Holds the currently expanded project ({ image, title }) or null when closed
+  const [expandedProject, setExpandedProject] = useState(null);
+
+  // Close the expanded photo on Escape key
+  useEffect(() => {
+    if (!expandedProject) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setExpandedProject(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [expandedProject]);
+
   const projects = [
     {
       title: 'RAG System',
@@ -47,21 +60,20 @@ export default function ProjectsPost() {
               {idx > 0 && <div className="my-4 border-t border-slate-200" />}
 
               <div className="flex gap-3">
-                {/* Small image with border */}
-                <a
-                  href={proj.link}
-                  target="_blank"
-                  rel="noreferrer"
+                {/* Small image with border — click to expand */}
+                <button
+                  type="button"
+                  onClick={() => setExpandedProject(proj)}
                   className="block shrink-0"
                 >
                   <div className="w-24 h-24 overflow-hidden border rounded-lg bg-slate-500 border-slate-200">
                     <img
                       src={proj.image}
                       alt={proj.title}
-                      className="object-cover w-full h-full transition-all hover:brightness-95"
+                      className="object-cover w-full h-full transition-all cursor-pointer hover:brightness-95"
                     />
                   </div>
-                </a>
+                </button>
 
                 {/* Text on the right */}
                 <div className="flex-1 min-w-0 py-0.5">
@@ -107,6 +119,36 @@ export default function ProjectsPost() {
           ))}
         </div>
       </div>
+
+      {/* Expanded Project Image Modal */}
+      {expandedProject && (
+        <div
+          onClick={() => setExpandedProject(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setExpandedProject(null)}
+            aria-label="Close"
+            className="absolute p-2 text-white transition-colors rounded-full top-4 right-4 hover:bg-white/10"
+          >
+            <X size={28} />
+          </button>
+
+          {/* Image + caption: stop propagation so clicking it doesn't close the modal */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="flex flex-col items-center max-w-[90vw] max-h-[85vh]"
+          >
+            <img
+              src={expandedProject.image}
+              alt={expandedProject.title}
+              className="max-w-[90vw] max-h-[75vh] rounded-lg object-contain shadow-2xl"
+            />
+            <p className="mt-3 text-sm font-semibold text-white">{expandedProject.title}</p>
+          </div>
+        </div>
+      )}
     </PostCard>
   );
 }

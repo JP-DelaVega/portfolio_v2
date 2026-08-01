@@ -1,8 +1,21 @@
-import React from 'react';
-import { LuMail, LuFileDown, LuCheck } from 'react-icons/lu';
+import React, { useState, useEffect } from 'react';
+import { LuMail, LuFileDown, LuCheck, LuX } from 'react-icons/lu';
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function ProfileHeader() {
+    // null when closed, otherwise the src of the image currently expanded
+    const [expandedImage, setExpandedImage] = useState(null);
+
+    // Close the expanded photo on Escape key
+    useEffect(() => {
+        if (!expandedImage) return;
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') setExpandedImage(null);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [expandedImage]);
+
     return (
         <div className="mb-6 overflow-hidden bg-white border shadow-sm rounded-xl border-slate-200" id="ProfileHeader">
             {/* Background Cover */}
@@ -10,7 +23,8 @@ export default function ProfileHeader() {
                 <img
                     src="/images/background.png"
                     alt="Background Cover"
-                    className="object-cover w-full h-full"
+                    onClick={() => setExpandedImage('/images/background.png')}
+                    className="object-cover w-full h-full cursor-pointer "
                 />
             </div>
 
@@ -21,7 +35,8 @@ export default function ProfileHeader() {
                         <img
                             src="/images/profile.jpg"
                             alt="John Philip Dela Vega"
-                            className="object-cover bg-white border-4 border-white rounded-full shadow-md w-28 h-28 sm:w-36 sm:h-36"
+                            onClick={() => setExpandedImage('/images/profile.jpg')}
+                            className="object-cover bg-white border-4 border-white rounded-full shadow-md w-28 h-28 sm:w-36 sm:h-36 cursor-pointer transition-transform hover:scale-102"
                         />
                         <span className="absolute w-4 h-4 border-2 border-white rounded-full bottom-2 right-2 bg-emerald-500" title="Available for work"></span>
                     </div>
@@ -91,6 +106,31 @@ export default function ProfileHeader() {
                     </a>
                 </div>
             </div>
+
+            {/* Expanded Image Modal (profile picture or background cover) */}
+            {expandedImage && (
+                <div
+                    onClick={() => setExpandedImage(null)}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+                >
+                    {/* Close Button */}
+                    <button
+                        onClick={() => setExpandedImage(null)}
+                        aria-label="Close"
+                        className="absolute p-2 text-white transition-colors rounded-full top-4 right-4 hover:bg-white/10"
+                    >
+                        <LuX size={28} />
+                    </button>
+
+                    {/* Image itself: stop propagation so clicking the photo doesn't close it */}
+                    <img
+                        src={expandedImage}
+                        alt="Expanded view"
+                        onClick={(e) => e.stopPropagation()}
+                        className="max-w-[90vw] max-h-[85vh] rounded-lg object-contain shadow-2xl"
+                    />
+                </div>
+            )}
         </div>
     );
 }

@@ -36,6 +36,13 @@ export default function PostCard({
   const [commentText, setCommentText] = useState('');
   const [showComments, setShowComments] = useState(initialComments.length > 0);
 
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const handleLike = () => {
     setIsLikingAnim(true);
     setTimeout(() => setIsLikingAnim(false), 300);
@@ -85,7 +92,7 @@ export default function PostCard({
       className="mb-6 overflow-hidden transition-all bg-white border shadow-sm rounded-xl border-slate-200 hover:border-slate-300"
     >
       {/* Post Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-100">
+      <div className="flex items-center justify-between p-4 border-b border-slate-100" onClick={() => scrollToSection("topHeader")}>
         <div className="flex items-center gap-3">
           <img
             src="/images/profile.jpg"
@@ -94,7 +101,7 @@ export default function PostCard({
           />
           <div>
             <div className="flex items-center gap-1.5">
-              <h3 className="text-sm font-bold cursor-pointer text-slate-900 hover:underline">
+              <h3 className="text-sm font-bold cursor-pointer text-slate-900 hover:underline" onClick={() => scrollToSection("topHeader")}>
                 John Philip Dela Vega
               </h3>
               <span className="bg-sky-100 text-sky-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">
