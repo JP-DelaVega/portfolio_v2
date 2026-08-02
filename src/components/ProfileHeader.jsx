@@ -47,9 +47,9 @@ export default function ProfileHeader() {
             </div>
 
             {/* Profile Details Container */}
-            <div className="relative px-6 pb-6">
+            <div className="relative px-4 sm:px-6 pb-6">
                 <div className="flex flex-col justify-between gap-4 mb-4 -mt-16 sm:flex-row sm:items-end sm:-mt-20">
-                    <div className="relative">
+                    <div className="relative self-start">
                         {/* Profile Picture — opens My Day story on click */}
                         <div
                             className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-white bg-white shadow-md sm:h-36 sm:w-36 cursor-pointer group"
@@ -75,7 +75,7 @@ export default function ProfileHeader() {
                     </div>
 
                     {/* Quick Action CTAs */}
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-3 sm:gap-4">
                         <a
                             href="https://github.com/JP-DelaVega"
                             target="_blank"
@@ -96,9 +96,10 @@ export default function ProfileHeader() {
                 </div>
 
                 <div>
-                    <div className="flex items-center gap-2">
-                        <h1 className={`text-2xl font-extrabold ${textPrimary}`}>John Philip Dela Vega</h1>
-                        <div className={`inline-flex items-center gap-2 px-3 py-1 text-xs font-bold border rounded-full ${badgeClasses}`}>
+                    {/* Name + badge: wraps to its own line on narrow screens instead of overflowing */}
+                    <div className="flex flex-wrap items-center gap-2">
+                        <h1 className={`text-xl sm:text-2xl font-extrabold ${textPrimary}`}>John Philip Dela Vega</h1>
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] sm:text-xs font-bold border rounded-full whitespace-nowrap ${badgeClasses}`}>
                             Open to New Opportunities
                         </div>
                     </div>
@@ -110,16 +111,18 @@ export default function ProfileHeader() {
                     </p>
                 </div>
 
-                {/* Social Links */}
-                <div className={`flex items-center gap-3 pt-4 mt-4 text-xs font-semibold border-t ${borderClasses}`}>
-                    <div className="relative inline-block group">
+                {/* Social Links — wraps and goes full-width per button on mobile, inline on larger screens */}
+                <div className={`flex flex-wrap items-center gap-2 sm:gap-3 pt-4 mt-4 text-xs font-semibold border-t ${borderClasses}`}>
+                    <div className="relative group flex-1 sm:flex-none min-w-[160px] sm:min-w-0">
                         <a
                             href="mailto:jayplought@gmail.com"
-                            className="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm transition-all"
+                            className="w-full sm:w-auto px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs flex items-center justify-center sm:justify-start gap-1.5 shadow-sm transition-all"
                         >
                             <LuMail size={14} /> Connect / Email
                         </a>
-                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 bg-slate-900 text-white text-[11px] font-medium rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-md">
+
+                        {/* Tooltip — hidden on touch/mobile since there's no hover state there */}
+                        <div className="hidden sm:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 bg-slate-900 text-white text-[11px] font-medium rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-md">
                             jayplought@gmail.com
                             <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
                         </div>
@@ -128,7 +131,7 @@ export default function ProfileHeader() {
                         href="https://drive.google.com/file/d/1l7nx3t_WN7B6VSL3sH9oXmpxTbKBrGOR/view?usp=sharing"
                         target="_blank"
                         rel="noreferrer"
-                        className={`px-4 py-2 rounded-lg border font-semibold text-xs flex items-center gap-1.5 transition-all ${buttonBorder}`}
+                        className={`flex-1 sm:flex-none min-w-[120px] sm:min-w-0 px-4 py-2 rounded-lg border font-semibold text-xs flex items-center justify-center sm:justify-start gap-1.5 transition-all ${buttonBorder}`}
                     >
                         <LuFileDown size={14} /> Resume
                     </a>

@@ -24,9 +24,9 @@ export default function PostCard({
   const inputClass = tokens.input;
   const buttonGhost = tokens.buttonGhost;
   const activeButton = tokens.activeButton;
- const commentBubble = isDark
-  ? 'bg-slate-800/80 border-slate-600/50 text-slate-200'
-  : 'bg-white border-slate-200 text-slate-800';
+  const commentBubble = isDark
+    ? 'bg-neutral-800/85 border-neutral-700/50 text-neutral-200'
+    : 'bg-white border-slate-200 text-slate-800';
 
   const [likes, setLikes] = useState(initialLikes);
   const [hasLiked, setHasLiked] = useState(false);
@@ -158,14 +158,14 @@ export default function PostCard({
       </div>
 
       {/* Action Buttons */}
-      <div className={`flex items-center justify-between border-t px-2 py-1 ${borderClass}`}>
+      <div className={`flex items-center justify-between gap-1 border-t px-2 py-1 ${borderClass}`}>
         <button
           onClick={handleLike}
-          className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-xs font-semibold transition-all active:scale-95 ${hasLiked ? activeButton : `${buttonGhost}`
+          className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition-all active:scale-95 ${hasLiked ? activeButton : buttonGhost
             }`}
         >
           <ThumbsUp
-            size={20}
+            size={16}
             className={`transition-transform duration-200 ${isLikingAnim ? 'scale-125 -rotate-12' : 'scale-100'} ${hasLiked ? 'fill-sky-600' : ''}`}
           />
           <span>{hasLiked ? 'Liked' : 'Like'}</span>
@@ -173,7 +173,7 @@ export default function PostCard({
 
         <button
           onClick={() => setShowComments((s) => !s)}
-          className={`flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-xs font-semibold transition-all active:scale-95 ${showComments ? activeButton : `${buttonGhost}`
+          className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition-all active:scale-95 ${showComments ? activeButton : buttonGhost
             }`}
         >
           <MessageSquare size={16} />
@@ -182,7 +182,7 @@ export default function PostCard({
 
         <button
           onClick={handleShare}
-          className={`relative flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-xs font-semibold transition-all active:scale-95 ${buttonGhost}`}
+          className={`relative flex flex-1 items-center justify-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition-all active:scale-95 ${buttonGhost}`}
         >
           {copied ? (
             <Check size={16} className="text-emerald-600" />
