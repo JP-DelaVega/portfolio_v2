@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Home, Code, Briefcase, FolderGit2, Award, Mail, Bookmark } from 'lucide-react';
 import { getThemeTokens } from '../theme';
-
+import CoinBlockGame from './CoinBlockGame';
 export default function NavigationSidebar() {
   const theme = useSelector((state) => state.theme.value);
   const tokens = getThemeTokens(theme);
@@ -54,15 +54,7 @@ export default function NavigationSidebar() {
       </div>
 
       {/* Quick Bio / Widget */}
-      <div className={`rounded-xl border p-4 text-xs ${cardClasses} ${textClasses}`}>
-        <div className={`mb-2 flex items-center gap-2 font-bold ${headingClasses}`}>
-          <Bookmark size={14} className="text-sky-600" />
-          <span>Quick Summary</span>
-        </div>
-        <p className={`leading-relaxed ${mutedClasses}`}>
-          Interested in Full Stack Development, AI Engineering, and Low-Code Development. Seeking full-time remote or hybrid opportunities.
-        </p>
-      </div>
+      <CoinBlockGame />
     </aside>
   );
 }
