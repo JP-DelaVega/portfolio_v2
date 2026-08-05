@@ -61,7 +61,7 @@ export default function ExperiencePost() {
         {visibleExperiences.map((exp, idx) => (
           <div
             key={idx}
-            className={`py-1 pl-4 border-l-2 border-sky-500 transition-all duration-300 ${!expanded && idx === 0 ? '' : ''
+            className={`py-1  transition-all duration-300 ${!expanded && idx === 0 ? '' : ''
               }`}
           >
             <div className="flex flex-col justify-between gap-1 mb-1 sm:flex-row sm:items-center">

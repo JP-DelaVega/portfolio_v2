@@ -204,85 +204,102 @@ export default function ChatWidget() {
   };
 
   const submitMessage = async (rawText) => {
-    const userMessage = (rawText ?? '').trim();
-    if (!userMessage) return;
+  const userMessage = (rawText ?? '').trim();
+  if (!userMessage) return;
 
-    setInput('');
-    setMessages((prev) => [...prev, { sender: 'user', text: userMessage }]);
-    setIsTyping(true);
+  setInput('');
+  setMessages((prev) => [...prev, { sender: 'user', text: userMessage }]);
+  setIsTyping(true);
 
-    try {
-      const response = await fetch(BACKEND_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question: userMessage,
-          db_name: DEFAULT_DB_NAME,
-          history: conversationHistory,
-        }),
-      });
+  const processLine = (line) => {
+    const trimmed = line.trim();
+    if (!trimmed) return '';
 
-      if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+    if (trimmed.startsWith('data:')) {
+      const dataContent = trimmed.replace(/^data:\s*/, '');
+      if (dataContent === '[DONE]') return '';
+      try {
+        const parsed = JSON.parse(dataContent);
+        if ('content' in parsed) return parsed.content;
+        if ('text' in parsed) return parsed.text;
+        if ('answer' in parsed) return parsed.answer;
+        if ('delta' in parsed) return parsed.delta;
+        return dataContent; // unrecognized shape — fall back to raw
+      } catch (_) {
+        return dataContent;
+      }
+    }
+    return trimmed;
+  };
 
-      setIsTyping(false);
+  const appendChunk = (chunkText, fullSoFar) => {
+    if (!chunkText) return fullSoFar;
+    const next = fullSoFar + chunkText;
+    setMessages((prev) => {
+      const updated = [...prev];
+      updated[updated.length - 1] = { ...updated[updated.length - 1], text: next };
+      return updated;
+    });
+    return next;
+  };
 
-      setMessages((prev) => [...prev, { sender: 'ai', text: '' }]);
+  try {
+    const response = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: userMessage,
+        db_name: DEFAULT_DB_NAME,
+        history: conversationHistory,
+      }),
+    });
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let fullResponseText = '';
-      let buffer = '';
+    if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+    setIsTyping(false);
+    setMessages((prev) => [...prev, { sender: 'ai', text: '' }]);
 
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop();
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullResponseText = '';
+    let buffer = '';
 
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed) continue;
+    while (true) {
+      const { done, value } = await reader.read();
 
-          let chunkText = '';
-          if (trimmed.startsWith('data:')) {
-            const dataContent = trimmed.replace(/^data:\s*/, '');
-            if (dataContent === '[DONE]') continue;
-            try {
-              const parsed = JSON.parse(dataContent);
-              chunkText = parsed.content || parsed.text || parsed.answer || parsed.delta || dataContent;
-            } catch (_) {
-              chunkText = dataContent;
-            }
-          } else {
-            chunkText = trimmed;
-          }
-
-          fullResponseText += chunkText;
-
-          setMessages((prev) => {
-            const updated = [...prev];
-            updated[updated.length - 1].text = fullResponseText;
-            return updated;
-          });
+      if (done) {
+        // Flush whatever's left in the buffer — this is the fix.
+        // Also flush any bytes trapped in the decoder itself.
+        buffer += decoder.decode();
+        if (buffer.trim()) {
+          fullResponseText = appendChunk(processLine(buffer), fullResponseText);
         }
+        break;
       }
 
-      setConversationHistory((prev) => [
-        ...prev,
-        { role: 'user', content: userMessage },
-        { role: 'assistant', content: fullResponseText },
-      ]);
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
 
-      speak(fullResponseText);
-    } catch (err) {
-      setIsTyping(false);
-      console.error('Chat error:', err);
-      const fallback = 'Sorry, I could not connect to the backend server.';
-      setMessages((prev) => [...prev, { sender: 'ai', text: fallback }]);
+      for (const line of lines) {
+        fullResponseText = appendChunk(processLine(line), fullResponseText);
+      }
     }
-  };
+
+    setConversationHistory((prev) => [
+      ...prev,
+      { role: 'user', content: userMessage },
+      { role: 'assistant', content: fullResponseText },
+    ]);
+
+    speak(fullResponseText);
+  } catch (err) {
+    setIsTyping(false);
+    console.error('Chat error:', err);
+    const fallback = 'Sorry, I could not connect to the backend server.';
+    setMessages((prev) => [...prev, { sender: 'ai', text: fallback }]);
+  }
+};
 
   const handleSendMessage = (e) => {
     e.preventDefault();
