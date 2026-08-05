@@ -129,7 +129,12 @@ export default function CoinBlockGame() {
                         <div className="absolute inset-0" style={{
                             background: 'linear-gradient(180deg, #020617 0%, #0f172a 40%, #1e1b4b 100%)'
                         }} />
-                        <div className="absolute top-2 right-3 w-5 h-5 rounded-full bg-yellow-100/80 shadow-[0_0_10px_rgba(253,224,71,0.4)]" />
+                        {/* Moon — moved to center-top */}
+                        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full" style={{
+                            background: 'radial-gradient(circle, rgba(253,224,71,0.2) 0%, transparent 70%)'
+                        }} />
+                        <div className="absolute top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-yellow-100/80 shadow-[0_0_10px_rgba(253,224,71,0.4)]" />
+                        {/* Stars */}
                         <div className="absolute top-2 left-4 w-0.5 h-0.5 bg-white rounded-full animate-pulse" />
                         <div className="absolute top-4 left-10 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
                         <div className="absolute top-2 left-16 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.7s' }} />
@@ -145,6 +150,7 @@ export default function CoinBlockGame() {
                         <div className="absolute top-3 left-8 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '1.2s' }} />
                         <div className="absolute top-4 left-14 w-0.5 h-0.5 bg-blue-100 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
                         <div className="absolute top-2 right-14 w-0.5 h-0.5 bg-blue-100 rounded-full animate-pulse" style={{ animationDelay: '1.0s' }} />
+                        {/* Hills */}
                         <div className="absolute bottom-0 left-0 right-0 h-8 bg-indigo-950/70 rounded-t-[50%] scale-x-150 translate-y-3" />
                         <div className="absolute bottom-0 left-[-20%] w-[140%] h-5 bg-indigo-900/50 rounded-t-[100%]" />
                     </>
@@ -153,7 +159,9 @@ export default function CoinBlockGame() {
                         <div className="absolute inset-0" style={{
                             background: 'linear-gradient(180deg, #3b82f6 0%, #60a5fa 40%, #93c5fd 75%, #86efac 76%, #4ade80 78%, #22c55e 100%)'
                         }} />
-                        <div className="absolute top-2 right-3 w-5 h-5 rounded-full bg-yellow-300 shadow-[0_0_10px_rgba(253,224,71,0.5)]" />
+                        {/* Sun — moved to center-top */}
+                        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-yellow-300 shadow-[0_0_10px_rgba(253,224,71,0.5)]" />
+                        {/* Clouds */}
                         <div className="absolute top-2 left-3 opacity-90 scale-75">
                             <div className="relative">
                                 <div className="w-8 h-3 bg-white rounded-full" />
@@ -186,15 +194,18 @@ export default function CoinBlockGame() {
                                 <div className="absolute -top-1 left-1 w-3 h-3 bg-white rounded-full" />
                             </div>
                         </div>
+                        {/* Hills */}
                         <div className="absolute bottom-6 left-[-10%] w-24 h-10 bg-green-500 rounded-t-full opacity-90" />
                         <div className="absolute bottom-6 right-[-10%] w-28 h-12 bg-green-600 rounded-t-full opacity-90" />
                         <div className="absolute bottom-7 left-[20%] w-2.5 h-2.5 bg-green-700 rounded-full opacity-60" />
                         <div className="absolute bottom-7 left-[22%] w-1.5 h-1.5 bg-green-700 rounded-full opacity-60" />
+                        {/* Ground */}
                         <div className="absolute bottom-0 left-0 right-0 h-4 bg-[#c2410c]" style={{
                             backgroundImage: 'linear-gradient(90deg, #9a3412 1px, transparent 1px), linear-gradient(0deg, #9a3412 1px, transparent 1px)',
                             backgroundSize: '10px 100%, 100% 50%'
                         }} />
                         <div className="absolute bottom-4 left-0 right-0 h-0.5 bg-green-700/30" />
+                        {/* Pipe */}
                         <div className="absolute bottom-4 left-3 flex flex-col items-center opacity-30 scale-75">
                             <div className="w-3 h-0.5 bg-green-700" />
                             <div className="w-2.5 h-2.5 bg-green-600 border-x border-green-800" />
@@ -205,7 +216,6 @@ export default function CoinBlockGame() {
             </div>
 
             {/* ===== CONTENT ===== */}
-            {/* 2️⃣ INNER CONTENT — change h-28 to h-36 (h-40 minus p-2 padding) */}
             <div className="relative z-10 flex flex-col h-36">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-1">
@@ -219,10 +229,11 @@ export default function CoinBlockGame() {
                         <button
                             onClick={quitGame}
                             aria-label="Quit game"
-                            className={`flex items-center justify-center w-5 h-5 rounded-full shadow-sm transition-all hover:scale-110 active:scale-90 ${isDark
-                                    ? 'bg-slate-800/80 text-slate-200 hover:bg-slate-700 border border-slate-600'
+                            className={`flex items-center justify-center w-5 h-5 rounded-full shadow-sm transition-all hover:scale-110 active:scale-90 ${
+                                isDark 
+                                    ? 'bg-slate-800/80 text-slate-200 hover:bg-slate-700 border border-slate-600' 
                                     : 'bg-white/80 text-slate-700 hover:bg-white border border-slate-200'
-                                }`}
+                            }`}
                         >
                             <X size={10} strokeWidth={2.5} />
                         </button>
@@ -233,8 +244,9 @@ export default function CoinBlockGame() {
                 <div className="relative flex-1 min-h-0">
                     {/* Idle */}
                     <div
-                        className={`absolute inset-0 flex flex-col items-center justify-center gap-1.5 transition-all duration-500 ${isPlaying ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
-                            }`}
+                        className={`absolute inset-0 flex flex-col items-center justify-center gap-1.5 transition-all duration-500 ${
+                            isPlaying ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
+                        }`}
                     >
                         <p className={`text-center text-[10px] leading-tight font-semibold ${isDark ? tokens.muted : 'text-slate-800'}`}>
                             Hit the block. Build combos.
@@ -256,8 +268,9 @@ export default function CoinBlockGame() {
 
                     {/* Playing */}
                     <div
-                        className={`absolute inset-0 flex flex-col transition-all duration-500 ${isPlaying ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-                            }`}
+                        className={`absolute inset-0 flex flex-col transition-all duration-500 ${
+                            isPlaying ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                        }`}
                     >
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1.5">
@@ -281,8 +294,9 @@ export default function CoinBlockGame() {
                             {toast && (
                                 <div
                                     key={toast.key}
-                                    className={`absolute -top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none whitespace-nowrap font-black text-[10px] tracking-wide animate-toast-pop ${toast.crit ? 'text-yellow-300' : 'text-white'
-                                        }`}
+                                    className={`absolute -top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none whitespace-nowrap font-black text-[10px] tracking-wide animate-toast-pop ${
+                                        toast.crit ? 'text-yellow-300' : 'text-white'
+                                    }`}
                                     style={{ textShadow: '0 1px 3px rgba(0,0,0,0.7)' }}
                                 >
                                     {toast.text}
