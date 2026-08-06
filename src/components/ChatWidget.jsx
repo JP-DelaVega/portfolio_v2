@@ -204,102 +204,114 @@ export default function ChatWidget() {
   };
 
   const submitMessage = async (rawText) => {
-  const userMessage = (rawText ?? '').trim();
-  if (!userMessage) return;
+    const userMessage = (rawText ?? '').trim();
+    if (!userMessage) return;
 
-  setInput('');
-  setMessages((prev) => [...prev, { sender: 'user', text: userMessage }]);
-  setIsTyping(true);
+    setInput('');
+    setMessages((prev) => [...prev, { sender: 'user', text: userMessage }]);
+    setIsTyping(true);
 
-  const processLine = (line) => {
-    const trimmed = line.trim();
-    if (!trimmed) return '';
+    const processLine = (line) => {
+      const trimmed = line.trim();
+      if (!trimmed) return '';
 
-    if (trimmed.startsWith('data:')) {
-      const dataContent = trimmed.replace(/^data:\s*/, '');
-      if (dataContent === '[DONE]') return '';
-      try {
-        const parsed = JSON.parse(dataContent);
-        if ('content' in parsed) return parsed.content;
-        if ('text' in parsed) return parsed.text;
-        if ('answer' in parsed) return parsed.answer;
-        if ('delta' in parsed) return parsed.delta;
-        return dataContent; // unrecognized shape — fall back to raw
-      } catch (_) {
-        return dataContent;
-      }
-    }
-    return trimmed;
-  };
-
-  const appendChunk = (chunkText, fullSoFar) => {
-    if (!chunkText) return fullSoFar;
-    const next = fullSoFar + chunkText;
-    setMessages((prev) => {
-      const updated = [...prev];
-      updated[updated.length - 1] = { ...updated[updated.length - 1], text: next };
-      return updated;
-    });
-    return next;
-  };
-
-  try {
-    const response = await fetch(BACKEND_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        question: userMessage,
-        db_name: DEFAULT_DB_NAME,
-        history: conversationHistory,
-      }),
-    });
-
-    if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
-
-    setIsTyping(false);
-    setMessages((prev) => [...prev, { sender: 'ai', text: '' }]);
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let fullResponseText = '';
-    let buffer = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-
-      if (done) {
-        // Flush whatever's left in the buffer — this is the fix.
-        // Also flush any bytes trapped in the decoder itself.
-        buffer += decoder.decode();
-        if (buffer.trim()) {
-          fullResponseText = appendChunk(processLine(buffer), fullResponseText);
+      if (trimmed.startsWith('data:')) {
+        const dataContent = trimmed.replace(/^data:\s*/, '');
+        if (dataContent === '[DONE]') return '';
+        try {
+          const parsed = JSON.parse(dataContent);
+          if ('content' in parsed) return parsed.content;
+          if ('text' in parsed) return parsed.text;
+          if ('answer' in parsed) return parsed.answer;
+          if ('delta' in parsed) return parsed.delta;
+          return dataContent; // unrecognized shape — fall back to raw
+        } catch (_) {
+          return dataContent;
         }
-        break;
+      }
+      return trimmed;
+    };
+
+    const appendChunk = (chunkText, fullSoFar) => {
+      if (!chunkText) return fullSoFar;
+      const next = fullSoFar + chunkText;
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = { ...updated[updated.length - 1], text: next };
+        return updated;
+      });
+      return next;
+    };
+
+    try {
+      const response = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: userMessage,
+          db_name: DEFAULT_DB_NAME,
+          history: conversationHistory,
+        }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          let msg = "I'm getting a lot of questions right now, try again in a moment.";
+          try {
+            const body = await response.json();
+            if (body?.message) msg = body.message;
+          } catch (_) {
+            // response wasn't JSON, stick with the default message
+          }
+          throw new Error(msg);
+        }
+        throw new Error(`HTTP Error ${response.status}`);
       }
 
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop();
+      setIsTyping(false);
+      setMessages((prev) => [...prev, { sender: 'ai', text: '' }]);
 
-      for (const line of lines) {
-        fullResponseText = appendChunk(processLine(line), fullResponseText);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let fullResponseText = '';
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          // Flush whatever's left in the buffer — this is the fix.
+          // Also flush any bytes trapped in the decoder itself.
+          buffer += decoder.decode();
+          if (buffer.trim()) {
+            fullResponseText = appendChunk(processLine(buffer), fullResponseText);
+          }
+          break;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          fullResponseText = appendChunk(processLine(line), fullResponseText);
+        }
       }
+
+      setConversationHistory((prev) => [
+        ...prev,
+        { role: 'user', content: userMessage },
+        { role: 'assistant', content: fullResponseText },
+      ]);
+
+      speak(fullResponseText);
+    } catch (err) {
+      setIsTyping(false);
+      console.error('Chat error:', err);
+      const fallback = err.message || 'Sorry, I could not connect to the backend server.';
+      setMessages((prev) => [...prev, { sender: 'ai', text: fallback }]);
     }
-
-    setConversationHistory((prev) => [
-      ...prev,
-      { role: 'user', content: userMessage },
-      { role: 'assistant', content: fullResponseText },
-    ]);
-
-    speak(fullResponseText);
-  } catch (err) {
-    setIsTyping(false);
-    console.error('Chat error:', err);
-    const fallback = 'Sorry, I could not connect to the backend server.';
-    setMessages((prev) => [...prev, { sender: 'ai', text: fallback }]);
-  }
-};
+  };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
