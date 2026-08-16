@@ -17,11 +17,10 @@ export default function ExperiencePost() {
       period: 'Apr 2023 - Present',
       location: 'Makati City (Hybrid)',
       highlights: [
-        'Enhanced and maintained the Bureau of Internal Revenue (BIR) ePERA application, improving system functionality.',
-        'Resolved UAT-critical issues in the BIR DEM and eServices forms, ensuring system stability.',
-        'Investigated and resolved cross-layer defects involving frontend interfaces, backend services, and database queries.',
-        'Developed enterprise applications using OutSystems, including payroll automation, probation tracking, and procurement workflows.',
-        'Collaborated with QA testers, designers, and project managers in Agile sprints.'
+        'Independently maintained enterprise applications across both frontend and backend, delivering new features, enhancements, and system improvements.',
+        'Diagnosed and resolved UAT and production issues by identifying root causes and implementing effective solutions, ensuring application stability and deployment readiness.',
+        'Developed and enhanced enterprise business applications by implementing business logic, workflow automation, and process improvements to support internal operations.',
+        'Collaborated with QA testers, designers, and project managers in Agile sprints to deliver compliant, high-quality enterprise applications.',
       ]
     },
     {
@@ -30,9 +29,9 @@ export default function ExperiencePost() {
       period: 'Jun 2022 - Mar 2023',
       location: 'Clark, Pampanga (Remote)',
       highlights: [
-        'Developed and maintained responsive web applications aligned with business requirements.',
-        'Enhanced UI components using CSS and JavaScript, reducing reported UI defects during testing.',
-        'Designed wireframes and interactive prototypes in Figma to streamline stakeholder feedback.',
+        'Developed and maintained responsive web applications based on business requirements, implementing features and functionality across the application.',
+        'Designed wireframes and interactive prototypes to communicate proposed solutions, gather stakeholder feedback, and validate features before development.',
+        'Participated in Agile sprints, managing development tasks and delivering features within defined timelines and project requirements.',
         'Participated in Agile sprints, managing tasks in Jira and consistently delivering features on time.'
       ]
     },

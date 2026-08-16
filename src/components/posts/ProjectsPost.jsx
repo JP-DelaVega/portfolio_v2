@@ -83,8 +83,6 @@ export default function ProjectsPost() {
                 <div className="flex-1 min-w-0 py-0.5">
                   <h3 className={`text-sm font-bold ${tokens.cardTitle}`}>{proj.title}</h3>
                   <p className={`mt-0.5 text-xs leading-relaxed ${tokens.softText}`}>{proj.description}</p>
-
-
                   {/* Casual links */}
                   <p className={`mt-0 text-[12px] ${tokens.muted}`}>
                     You can access it{' '}
@@ -96,15 +94,7 @@ export default function ProjectsPost() {
                     >
                       here
                     </a>
-                    {' '}and here's the{' '}
-                    <a
-                      href={proj.code}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-medium text-sky-600 hover:underline"
-                    >
-                      source code
-                    </a>.
+                    .
                   </p>
 
                   {/* Hashtag stacks */}
